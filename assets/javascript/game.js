@@ -26,9 +26,18 @@ function randomNumber(a,b){
 //Create an array of ramdom numbers for the Gems
 function gNumber(){
 	var g = [];
+	var number;
 	for (var i = 0; i < maxGems ; i++) {
-		g[i] = randomNumber(cMinNumber, cMaxNumber);
+		number = randomNumber(cMinNumber, cMaxNumber);
+		//This if avoid having duplicate numbers in the array
+		if (g.indexOf(number)>=0) {
+			i--;
+		}
+		else{
+			g[i] = number;
+		}
 	}
+	console.log(g);
 	return g;
 	
 }
@@ -37,7 +46,7 @@ function resetGame(){
 	gemsNumbers = []; 
 	targetNumber = 0 ;
 	counter = 0;
-	$("#numberToGuess, #scoreDiv, #gemsDiv, .crystalImage").empty();
+	$("#numberToGuess, #scoreDiv, #gemsDiv").empty();
 }
 
 function startGame(){
@@ -52,6 +61,7 @@ function startGame(){
 	for (var i = 0; i < gemsImages.length; i++) {
 		var crystal = $("<img>").addClass("crystalImage").attr("src", gemsImages[i]).attr("data-crystalvalue", gemsNumbers[i]);
 		$("#gemsDiv").append(crystal);
+		console.log(crystal[0]);
 	}
 
 }
@@ -63,8 +73,9 @@ $(document).ready(function(){
 
 	}
 	//We will apply a click event to every crystal Image in the page
-	$(".crystalImage").on("click", function() {
-
+	//The on click funtion in the document ensure the differetn
+	//iterations of the game
+	$(document).on('click', '.crystalImage', function() {
 		// Determining the crystal's value requires us to extract the value from the data attribute.
 		// Using the $(this) keyword specifies that we should be extracting the crystal value of the clicked crystal.
 		// Using the .data("crystalvalue") allows us to grab the value out of the "data-crystalvalue" attribute.
@@ -84,9 +95,6 @@ $(document).ready(function(){
 			$("#wins").text(winCounter);
 			resetGame();
 			startGame();
-			// console.log("target" + targetNumber);
-			// console.log("Gems Numbers" + gemsNumbers);
-			// console.log("Counter " + counter);
 		}
 
 		else if (counter > targetNumber) {
@@ -94,16 +102,11 @@ $(document).ready(function(){
 		  	$("#message").text("You lose!");
 		  	console.log(lossesCounter);
 		  	$("#losses").text(lossesCounter);
-			// $("#numberToGuess").text(targetNumber);
 		  	resetGame();
-		  	debugger;
 			startGame();
-			// console.log("target" + targetNumber);
-			// console.log("Gems Numbers" + gemsNumbers);
-			// console.log("Counter " + counter);
 		}
 
-	});
+	});//End document on click
 
 
 });//End Document Ready Function
